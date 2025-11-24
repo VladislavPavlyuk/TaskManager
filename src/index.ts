@@ -9,104 +9,100 @@ type Task = {
 // Array to store tasks
 let tasks: Task[] = [];
 
-// Function to create a new task
-function createTask(title: string, description: string): Task {
+// Counter for unique task IDs
+let taskIdCounter: number = 1;
+
+// Function to add a new task
+function addTask(title: string, description: string): void {
   const newTask: Task = {
-    id: tasks.length > 0 ? Math.max(...tasks.map(t => t.id)) + 1 : 1,
+    id: taskIdCounter++,
     title: title,
     description: description,
     completed: false
   };
   tasks.push(newTask);
-  return newTask;
 }
 
-// Function to get all tasks
-function getAllTasks(): Task[] {
-  return tasks;
-}
-
-// Function to get a task by ID
-function getTaskById(id: number): Task | undefined {
-  return tasks.find(task => task.id === id);
-}
-
-// Function to update a task
-function updateTask(id: number, updates: Partial<Omit<Task, 'id'>>): Task | null {
-  const currentTask = getTaskById(id);
-  if (!currentTask) {
-    return null;
-  }
-  const updatedTask: Task = {
-    id: currentTask.id,
-    title: updates.title !== undefined ? updates.title : currentTask.title,
-    description: updates.description !== undefined ? updates.description : currentTask.description,
-    completed: updates.completed !== undefined ? updates.completed : currentTask.completed
-  };
+// Function to remove a task by ID
+function removeTask(id: number): void {
   const taskIndex = tasks.findIndex(task => task.id === id);
   if (taskIndex !== -1) {
-    tasks[taskIndex] = updatedTask;
+    tasks.splice(taskIndex, 1);
   }
-  return updatedTask;
 }
 
-// Function to delete a task
-function deleteTask(id: number): boolean {
-  const taskIndex = tasks.findIndex(task => task.id === id);
-  if (taskIndex === -1) {
-    return false;
+// Function to mark a task as completed
+function markTaskAsCompleted(id: number): void {
+  const task = tasks.find(task => task.id === id);
+  if (task) {
+    task.completed = true;
   }
-  tasks.splice(taskIndex, 1);
-  return true;
 }
 
-// Function to toggle task completion status
-function toggleTaskCompletion(id: number): Task | null {
-  const task = getTaskById(id);
-  if (!task) {
-    return null;
+// Function to list all tasks
+function listTasks(): void {
+  if (tasks.length === 0) {
+    console.log('Список задач пуст.');
+    return;
   }
-  return updateTask(id, { completed: !task.completed });
+  console.log('Все задачи:');
+  tasks.forEach(task => {
+    const status = task.completed ? '✓ Выполнена' : '○ Не выполнена';
+    console.log(`ID: ${task.id} | ${status}`);
+    console.log(`  Название: ${task.title}`);
+    console.log(`  Описание: ${task.description}`);
+    console.log('');
+  });
 }
 
-// Function to get completed tasks
-function getCompletedTasks(): Task[] {
-  return tasks.filter(task => task.completed);
+// Function to list completed tasks
+function listCompletedTasks(): void {
+  const completedTasks = tasks.filter(task => task.completed);
+  if (completedTasks.length === 0) {
+    console.log('Нет выполненных задач.');
+    return;
+  }
+  console.log('Выполненные задачи:');
+  completedTasks.forEach(task => {
+    console.log(`ID: ${task.id} | ${task.title}`);
+    console.log(`  Описание: ${task.description}`);
+    console.log('');
+  });
 }
 
-// Function to get incomplete tasks
-function getIncompleteTasks(): Task[] {
-  return tasks.filter(task => !task.completed);
+// Function to list pending tasks
+function listPendingTasks(): void {
+  const pendingTasks = tasks.filter(task => !task.completed);
+  if (pendingTasks.length === 0) {
+    console.log('Нет невыполненных задач.');
+    return;
+  }
+  console.log('Невыполненные задачи:');
+  pendingTasks.forEach(task => {
+    console.log(`ID: ${task.id} | ${task.title}`);
+    console.log(`  Описание: ${task.description}`);
+    console.log('');
+  });
 }
 
 // Example usage
 console.log('=== Task Manager Application ===\n');
 
-// Create some sample tasks
-const task1 = createTask('Learn TypeScript', 'Study TypeScript basics and advanced features');
-const task2 = createTask('Build a project', 'Create a task management application');
-const task3 = createTask('Write documentation', 'Document the code and usage');
+// Add some sample tasks
+addTask('Изучить TypeScript', 'Изучить основы и продвинутые возможности TypeScript');
+addTask('Создать проект', 'Создать приложение для управления задачами');
+addTask('Написать документацию', 'Документировать код и использование');
 
-console.log('Created tasks:');
-tasks.forEach(task => {
-  console.log(`- [${task.completed ? '✓' : ' '}] ${task.title} (ID: ${task.id})`);
-  console.log(`  Description: ${task.description}\n`);
-});
+// List all tasks
+listTasks();
 
-// Toggle completion for task 1
-console.log('Marking task 1 as completed...');
-toggleTaskCompletion(task1.id);
-console.log(`Task 1 status: ${getTaskById(task1.id)?.completed ? 'Completed' : 'Incomplete'}\n`);
+// Mark task with ID 1 as completed
+console.log('Помечаем задачу с ID 1 как выполненную...\n');
+markTaskAsCompleted(1);
 
-// Display completed tasks
-console.log('Completed tasks:');
-getCompletedTasks().forEach(task => {
-  console.log(`- ${task.title}`);
-});
+// List completed tasks
+listCompletedTasks();
 
-// Display incomplete tasks
-console.log('\nIncomplete tasks:');
-getIncompleteTasks().forEach(task => {
-  console.log(`- ${task.title}`);
-});
+// List pending tasks
+listPendingTasks();
 
