@@ -133,24 +133,43 @@ const listPendingTasks = (): void => {
   }
 };
 
-// Example usage
-console.log('=== Task Manager Application ===\n');
+// Тестирование приложения
+console.log('=== Тестирование Task Manager Application ===\n');
 
-// Add some sample tasks
+// 1. Добавление нескольких задач в список
+console.log('1. Добавление задач в список:\n');
 addTask('Изучить TypeScript', 'Изучить основы и продвинутые возможности TypeScript');
 addTask('Создать проект', 'Создать приложение для управления задачами');
 addTask('Написать документацию', 'Документировать код и использование');
+addTask('Протестировать приложение', 'Проверить работу всех функций');
+addTask('Оптимизировать код', 'Улучшить производительность и читаемость кода');
+console.log('Добавлено 5 задач.\n');
 
-// List all tasks
+// Вывод списка всех задач
+console.log('2. Список всех задач:\n');
 listTasks();
 
-// Mark task with ID 1 as completed
-console.log('Помечаем задачу с ID 1 как выполненную...\n');
+// 3. Отметка нескольких задач как выполненные
+console.log('3. Отметка задач как выполненные:\n');
 markTaskAsCompleted(1);
+markTaskAsCompleted(3);
+markTaskAsCompleted(5);
+console.log('');
 
-// List completed tasks
+// 4. Удаление одной задачи
+console.log('4. Удаление задачи:\n');
+removeTask(2);
+console.log('');
+
+// 5. Вывод списка всех задач после изменений
+console.log('5. Список всех задач после изменений:\n');
+listTasks();
+
+// 6. Вывод списка выполненных задач
+console.log('6. Список выполненных задач:\n');
 listCompletedTasks();
 
-// List pending tasks
+// 7. Вывод списка невыполненных задач
+console.log('7. Список невыполненных задач:\n');
 listPendingTasks();
 
